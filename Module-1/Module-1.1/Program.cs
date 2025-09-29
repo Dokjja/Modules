@@ -10,4 +10,4 @@ else
     Console.WriteLine($"{a} - нечетное");
 }
 Console.WriteLine("Нажмите любую клавишу для выхода...");
-Console.ReadKey(); 
+Console.ReadKey();
