@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module-1.1", "Module-1.1\Module-1.1.csproj", "{3CA374CF-286B-40AF-B6D7-68EE949195C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module-1.2", "Module-1.2\Module-1.2.csproj", "{A865ADCD-A665-4C19-B1B4-594EDD6D373D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3CA374CF-286B-40AF-B6D7-68EE949195C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CA374CF-286B-40AF-B6D7-68EE949195C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CA374CF-286B-40AF-B6D7-68EE949195C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CA374CF-286B-40AF-B6D7-68EE949195C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A865ADCD-A665-4C19-B1B4-594EDD6D373D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A865ADCD-A665-4C19-B1B4-594EDD6D373D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A865ADCD-A665-4C19-B1B4-594EDD6D373D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A865ADCD-A665-4C19-B1B4-594EDD6D373D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
