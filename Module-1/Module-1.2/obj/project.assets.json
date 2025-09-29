@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\DKJ\\Desktop\\Praktika\\Modules\\Module-1\\Module-1\\Module-1.2\\Module-1.2.csproj",
+      "projectUniqueName": "C:\\Users\\DKJ\\Desktop\\Praktika\\Modules\\Module-1\\Module-1.2\\Module-1.2.csproj",
       "projectName": "Module-1.2",
-      "projectPath": "C:\\Users\\DKJ\\Desktop\\Praktika\\Modules\\Module-1\\Module-1\\Module-1.2\\Module-1.2.csproj",
+      "projectPath": "C:\\Users\\DKJ\\Desktop\\Praktika\\Modules\\Module-1\\Module-1.2\\Module-1.2.csproj",
       "packagesPath": "C:\\Users\\DKJ\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\DKJ\\Desktop\\Praktika\\Modules\\Module-1\\Module-1\\Module-1.2\\obj\\",
+      "outputPath": "C:\\Users\\DKJ\\Desktop\\Praktika\\Modules\\Module-1\\Module-1.2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
