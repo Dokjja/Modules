@@ -1,0 +1,15 @@
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\bin\Debug\net9.0\Module-1.3.exe
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\bin\Debug\net9.0\Module-1.3.deps.json
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\bin\Debug\net9.0\Module-1.3.runtimeconfig.json
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\bin\Debug\net9.0\Module-1.3.dll
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\bin\Debug\net9.0\Module-1.3.pdb
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\obj\Debug\net9.0\Module-1.3.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\obj\Debug\net9.0\Module-1.3.AssemblyInfoInputs.cache
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\obj\Debug\net9.0\Module-1.3.AssemblyInfo.cs
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\obj\Debug\net9.0\Module-1.3.csproj.CoreCompileInputs.cache
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\obj\Debug\net9.0\Module-1.3.sourcelink.json
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\obj\Debug\net9.0\Module-1.3.dll
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\obj\Debug\net9.0\refint\Module-1.3.dll
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\obj\Debug\net9.0\Module-1.3.pdb
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\obj\Debug\net9.0\Module-1.3.genruntimeconfig.cache
+C:\Users\DKJ\Desktop\Praktika\Modules\Module-1\Module-1.3\obj\Debug\net9.0\ref\Module-1.3.dll
