@@ -4,4 +4,4 @@
 **/bin
 *.csproj
 ~$евник-отчет.docx
-
+*.tmp
