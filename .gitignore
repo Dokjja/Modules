@@ -1,9 +1,7 @@
-.idea/
-Module-1/Module-1.sln
-Module-1/.idea/.idea.Module-1/.idea
-Module-1/Module-1.1/obj
-Module-1/Module-1.1/Module-1.1.csproj
-Module-1/Module-1.2/obj
-Module-1/Module-1.2/Module-1.2.csproj
+*.sln
+**/.idea/
+**/obj
+**/bin
+*.csproj
 ~$евник-отчет.docx
 
