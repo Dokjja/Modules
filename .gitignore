@@ -1,7 +1,7 @@
 *.sln
-*/.idea/
-*/obj
-*/bin
+**/.idea/
+**/obj
+**/bin
 *.csproj
 ~$евник-отчет.docx
 
