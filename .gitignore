@@ -5,3 +5,4 @@
 *.csproj
 ~$евник-отчет.docx
 *.tmp
+*.DotSettings
