@@ -38,11 +38,11 @@
       - [Модуль 2.2.2](https://github.com/Dokjja/Modules/blob/main/Module-2/Module-2.2/Module-2.2.2/Program.cs)
       - [Модуль 2.2.3](https://github.com/Dokjja/Modules/blob/main/Module-2/Module-2.2/Module-2.2.3/Program.cs)
   - [Модуль 3](https://github.com/Dokjja/Modules/blob/main/Module-3)
-    - [Модуль 3.1](https://github.com/Dokjja/Modules/tree/main/Module-3/Module-3.1)
-    - [Модуль 3.2](https://github.com/Dokjja/Modules/tree/main/Module-3/Module-3.2)
-    - [Модуль 3.3](https://github.com/Dokjja/Modules/tree/main/Module-3/Module-3.3)
-    - [Модуль 3.4](https://github.com/Dokjja/Modules/tree/main/Module-3/Module-3.4)
-    - [Модуль 3.5](https://github.com/Dokjja/Modules/tree/main/Module-3/Module-3.5)
+    - [Модуль 3.1](https://github.com/Dokjja/Modules/tree/main/Module-3/Module-3.1/Program.cs)
+    - [Модуль 3.2](https://github.com/Dokjja/Modules/tree/main/Module-3/Module-3.2/Program.cs)
+    - [Модуль 3.3](https://github.com/Dokjja/Modules/tree/main/Module-3/Module-3.3/Program.cs)
+    - [Модуль 3.4](https://github.com/Dokjja/Modules/tree/main/Module-3/Module-3.4/Program.cs)
+    - [Модуль 3.5](https://github.com/Dokjja/Modules/tree/main/Module-3/Module-3.5/Program.cs)
       
 
 
