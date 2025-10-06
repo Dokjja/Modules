@@ -7,6 +7,10 @@
 ##
 <details>
   <summary><h2>Быстрая навигация</h2></summary>
+  
+  - [Модуль 1](https://github.com/Dokjja/Modules/blob/main/Module-1)
+    - [Модуль 1.1](https://github.com/Dokjja/Modules/tree/main/Module-1/Module-1.1)
+      - [Модуль 1.1.1]()
 
 
 
