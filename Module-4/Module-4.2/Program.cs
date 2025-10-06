@@ -1,10 +1,10 @@
 ﻿interface IProduct
 {
-    public string Name { get; set; }
-    public int Quantity { get; set; }
-    public double Price { get; set; }
+    string Name { get; set; }
+    int Quantity { get; set; }
+    double Price { get; set; }
     void ShowStock();
-    public void GetPrice();
+    void GetPrice();
 }
 
 class Water : IProduct
