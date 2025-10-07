@@ -49,6 +49,12 @@
     - [Модуль 4.3](https://github.com/Dokjja/Modules/tree/main/Module-4/Module-4.3/Program.cs)
     - [Модуль 4.4](https://github.com/Dokjja/Modules/tree/main/Module-4/Module-4.4/Program.cs)
     - [Модуль 4.5](https://github.com/Dokjja/Modules/tree/main/Module-4/Module-4.5/Program.cs)
+  - [Модуль 5](https://github.com/Dokjja/Modules/blob/main/Module-5)
+    - [Модуль 5.1](https://github.com/Dokjja/Modules/tree/main/Module-5/Module-5.1/Program.cs)
+    - [Модуль 5.2](https://github.com/Dokjja/Modules/tree/main/Module-5/Module-5.2/Program.cs)
+    - [Модуль 5.3](https://github.com/Dokjja/Modules/tree/main/Module-5/Module-5.3/Program.cs)
+    - [Модуль 5.4](https://github.com/Dokjja/Modules/tree/main/Module-5/Module-5.4/Program.cs)
+    - [Модуль 5.5](https://github.com/Dokjja/Modules/tree/main/Module-5/Module-5.5/Program.cs)
       
 
 
