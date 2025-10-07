@@ -5,4 +5,5 @@ bin/
 *.csproj
 ~$евник-отчет.docx
 *.tmp
+*.user
 *.DotSettings
