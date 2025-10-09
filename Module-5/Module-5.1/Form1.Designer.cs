@@ -71,7 +71,7 @@ partial class Form1
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        ClientSize = new System.Drawing.Size(788, 645);
+        ClientSize = new System.Drawing.Size(779, 645);
         Controls.Add(btnCircle);
         Controls.Add(btnRect);
         Controls.Add(btnLine);

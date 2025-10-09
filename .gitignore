@@ -7,3 +7,6 @@ bin/
 *.tmp
 *.user
 *.DotSettings
+.vs/
+Module-5/*/Program.cs
+*.resx
