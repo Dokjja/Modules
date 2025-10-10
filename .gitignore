@@ -9,4 +9,7 @@ bin/
 *.DotSettings
 .vs/
 Module-5/*/Program.cs
+Module-6/Program.cs
+Properties/
+*.config
 *.resx
