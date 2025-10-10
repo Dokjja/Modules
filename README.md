@@ -55,6 +55,7 @@
     - [Модуль 5.3](https://github.com/Dokjja/Modules/tree/main/Module-5/Module-5.3/Form1.cs)
     - [Модуль 5.4](https://github.com/Dokjja/Modules/tree/main/Module-5/Module-5.4/Form1.cs)
     - [Модуль 5.5](https://github.com/Dokjja/Modules/tree/main/Module-5/Module-5.5/Form1.cs)
+  - [Модуль 6](https://github.com/Dokjja/Modules/blob/main/Module-6/Form1.cs)
       
 
 
