@@ -1,4 +1,4 @@
-﻿namespace Module_7;
+﻿namespace Module_8;
 
 partial class Form1
 {
@@ -123,6 +123,7 @@ partial class Form1
         btn_Back.Text = "Back";
         btn_Back.UseMnemonic = false;
         btn_Back.UseVisualStyleBackColor = true;
+        btn_Back.Click += btn_Back_Click;
         // 
         // btn_Clear
         // 
@@ -135,18 +136,19 @@ partial class Form1
         btn_Clear.Text = "Clear";
         btn_Clear.UseMnemonic = false;
         btn_Clear.UseVisualStyleBackColor = true;
+        btn_Clear.Click += btn_Clear_Click;
         // 
         // btn_Percent
         // 
+        btn_Percent.BackColor = System.Drawing.SystemColors.ActiveBorder;
         btn_Percent.Dock = System.Windows.Forms.DockStyle.Fill;
         btn_Percent.Location = new System.Drawing.Point(1, 1);
         btn_Percent.Margin = new System.Windows.Forms.Padding(1);
         btn_Percent.Name = "btn_Percent";
         btn_Percent.Size = new System.Drawing.Size(108, 87);
         btn_Percent.TabIndex = 22;
-        btn_Percent.Text = "%";
         btn_Percent.UseMnemonic = false;
-        btn_Percent.UseVisualStyleBackColor = true;
+        btn_Percent.UseVisualStyleBackColor = false;
         // 
         // btn_Add
         // 
@@ -372,7 +374,7 @@ partial class Form1
         textBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
         textBox.DetectUrls = false;
         textBox.Dock = System.Windows.Forms.DockStyle.Fill;
-        textBox.Font = new System.Drawing.Font("Segoe UI", 40F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)204));
+        textBox.Font = new System.Drawing.Font("Bahnschrift Condensed", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)204));
         textBox.Location = new System.Drawing.Point(5, 5);
         textBox.Margin = new System.Windows.Forms.Padding(5);
         textBox.Multiline = false;
@@ -416,8 +418,8 @@ partial class Form1
     private System.Windows.Forms.Button btn_One;
     private System.Windows.Forms.Button btn_Column;
     private System.Windows.Forms.Button btn_DoubleZero;
-    private Button btn_Back;
-    private Button btn_Clear;
-    private Button btn_Percent;
+    private System.Windows.Forms.Button btn_Back;
+    private System.Windows.Forms.Button btn_Clear;
+    private System.Windows.Forms.Button btn_Percent;
     private System.Windows.Forms.RichTextBox textBox;
 }

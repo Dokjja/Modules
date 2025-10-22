@@ -1,4 +1,4 @@
-namespace Module_7;
+namespace Module_8;
 
 static class Program
 {
