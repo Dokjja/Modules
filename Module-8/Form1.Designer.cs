@@ -33,7 +33,6 @@ partial class Form1
         tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
         btn_Back = new System.Windows.Forms.Button();
         btn_Clear = new System.Windows.Forms.Button();
-        btn_Percent = new System.Windows.Forms.Button();
         btn_Add = new System.Windows.Forms.Button();
         btn_Zero = new System.Windows.Forms.Button();
         btn_Sub = new System.Windows.Forms.Button();
@@ -82,7 +81,6 @@ partial class Form1
         tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
         tableLayoutPanel2.Controls.Add(btn_Back, 2, 0);
         tableLayoutPanel2.Controls.Add(btn_Clear, 1, 0);
-        tableLayoutPanel2.Controls.Add(btn_Percent, 0, 0);
         tableLayoutPanel2.Controls.Add(btn_Add, 3, 4);
         tableLayoutPanel2.Controls.Add(btn_Zero, 1, 4);
         tableLayoutPanel2.Controls.Add(btn_Sub, 3, 3);
@@ -137,18 +135,6 @@ partial class Form1
         btn_Clear.UseMnemonic = false;
         btn_Clear.UseVisualStyleBackColor = true;
         btn_Clear.Click += btn_Clear_Click;
-        // 
-        // btn_Percent
-        // 
-        btn_Percent.BackColor = System.Drawing.SystemColors.ActiveBorder;
-        btn_Percent.Dock = System.Windows.Forms.DockStyle.Fill;
-        btn_Percent.Location = new System.Drawing.Point(1, 1);
-        btn_Percent.Margin = new System.Windows.Forms.Padding(1);
-        btn_Percent.Name = "btn_Percent";
-        btn_Percent.Size = new System.Drawing.Size(108, 87);
-        btn_Percent.TabIndex = 22;
-        btn_Percent.UseMnemonic = false;
-        btn_Percent.UseVisualStyleBackColor = false;
         // 
         // btn_Add
         // 
@@ -400,7 +386,7 @@ partial class Form1
     #endregion
 
     private TableLayoutPanel tableLayoutPanel1;
-    private TableLayoutPanel tableLayoutPanel2;
+    private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
     private System.Windows.Forms.Button btn_Add;
     private System.Windows.Forms.Button btn_Zero;
     private System.Windows.Forms.Button btn_Sub;
@@ -420,6 +406,5 @@ partial class Form1
     private System.Windows.Forms.Button btn_DoubleZero;
     private System.Windows.Forms.Button btn_Back;
     private System.Windows.Forms.Button btn_Clear;
-    private System.Windows.Forms.Button btn_Percent;
     private System.Windows.Forms.RichTextBox textBox;
 }

@@ -15,26 +15,24 @@ namespace Module_8
         public Form1()
         {
             InitializeComponent();
-
             // Инициализация операций
             operations.Add("btn_Add", new AddOperation());
             operations.Add("btn_Sub", new SubOperation());
             operations.Add("btn_Mult", new MultOperation());
             operations.Add("btn_Div", new DivOperation());
-            operations.Add("btn_Percent", new PercentOperation());
         }
 
         private void btn_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-
+            // Если была нажата кнопка результата
             if (resultShown)
             {
-                textBox.Text = "";
+                textBox.Text = ""; // Очищается поле вывода
                 resultShown = false;
             }
 
-            // Разрешаем только одну операцию за раз
+            // Только одну операцию за раз 
             if (operations.ContainsKey(btn.Name))
             {
                 if (selectedOperation != null)
@@ -48,9 +46,9 @@ namespace Module_8
                 textBox.Text += btn.Text;
             }
         }
-
         private void btn_Result_Click(object sender, EventArgs e)
         {
+            // Получение операндов
             var parts = textBox.Text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length < 3 || selectedOperation == null)
                 return;
@@ -59,6 +57,7 @@ namespace Module_8
             {
                 try
                 {
+                    // Выполнение выбранной операции
                     double result = selectedOperation.Execute(operandA, operandB);
                     textBox.Text = result.ToString(CultureInfo.InvariantCulture);
                 }
@@ -67,7 +66,6 @@ namespace Module_8
                     textBox.Text = "Ошибка: " + ex.Message;
                 }
             }
-
             resultShown = true;
             selectedOperation = null;
         }
@@ -79,7 +77,6 @@ namespace Module_8
             selectedOperation = null;
             resultShown = false;
         }
-
         private void btn_Back_Click(object sender, EventArgs e)
         {
             if (textBox.Text.Length > 0)
@@ -116,10 +113,5 @@ namespace Module_8
                 throw new DivideByZeroException("Деление на ноль невозможно");
             return a / b;
         }
-    }
-
-    public class PercentOperation : Operation
-    {
-        public override double Execute(double a, double b) => a * b / 100;
     }
 }
