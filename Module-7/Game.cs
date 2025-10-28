@@ -1,200 +1,108 @@
-using System;
-using System.Linq;
-using System.Threading;
-using System.Windows.Forms;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Mathematics;
-using OpenTK.Windowing.GraphicsLibraryFramework;
-using Keys = OpenTK.Windowing.GraphicsLibraryFramework.Keys;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
+using System.Drawing.Imaging;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using System.Globalization;
 
 namespace Module_7
 {
+    public static class Program
+    {
+        [STAThread]
+        public static void Main()
+        {
+            using (var game = new Game(800, 600, "3D Model Viewer"))
+            {
+                game.Run(60.0);
+            }
+        }
+    }
     public class Game : GameWindow
     {
-        Shader shader;
-        int vbo;
-        int vao;
-        int vertexCount;
-
-        Matrix4 modelMatrix = Matrix4.Identity;
-        Matrix4 projectionMatrix = Matrix4.Identity;
-
-        ObjModel model;
-
-        // simple orbit camera
-        float yaw = 0f;
-        float pitch = 0f;
-        float distance = 3.0f;
-        Vector2 lastMousePos;
-        bool rotating = false;
+        private ObjModel model = null;
+        private float angleX = 0, angleY = 0;
+        private int mouseX, mouseY;
+        private float modelScale = 1;
+        private bool isPressed = false;
 
         public Game(int width, int height, string title)
-            : base(GameWindowSettings.Default, new NativeWindowSettings() { Size = (width, height), Title = title }) { }
-
-        protected override void OnLoad()
+            : base(width, height, GraphicsMode.Default, title)
         {
-            base.OnLoad();
+        }
 
-            GL.ClearColor(0.2f, 0.3f, 0.3f, 1f);
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            GL.ClearColor(0.3f, 0.4f, 0.7f, 1.0f);
             GL.Enable(EnableCap.DepthTest);
-
-            shader = new Shader("shader.vert", "shader.frag");
-            shader.Use();
-
-            // create VAO / VBO
-            vao = GL.GenVertexArray();
-            vbo = GL.GenBuffer();
-
-            GL.BindVertexArray(vao);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-            // layout: location 0 = vec3 position, 1 = vec2 texcoord, 2 = vec3 normal
-            int stride = (3 + 2 + 3) * sizeof(float);
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, stride, 0);
-            GL.EnableVertexAttribArray(1);
-            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, stride, 3 * sizeof(float));
-            GL.EnableVertexAttribArray(2);
-            GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, stride, (3 + 2) * sizeof(float));
-
-            // default projection
-            projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45f), Size.X / (float)Size.Y, 0.1f, 100f);
-
-            // default model (small rotation so shading visible)
-            modelMatrix = Matrix4.CreateRotationX(MathHelper.DegreesToRadians(-90));
-
-            shader.SetVector3("lightColor", new Vector3(1f, 1f, 1f));
-            shader.SetVector3("objectColor", new Vector3(1f, 1f, 1f));
-            shader.SetInt("tex0", 0);
-
-            // optionally you can pre-load a model here
-            // Example: LoadModel("path/to/your.obj");
+            GL.Enable(EnableCap.Texture2D);
+            GL.Enable(EnableCap.Multisample);
+            GL.Enable(EnableCap.Lighting);
+            GL.Enable(EnableCap.Light0);
+            GL.Enable(EnableCap.Normalize);
+            
+            SetupLighting();
+            SetupMaterials();
         }
 
-        protected override void OnUnload()
+        private void SetupLighting()
         {
-            base.OnUnload();
-            shader?.Dispose();
-            if (vbo != 0) GL.DeleteBuffer(vbo);
-            if (vao != 0) GL.DeleteVertexArray(vao);
-            model?.Dispose();
+            float[] ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
+            float[] diffuse = { 0.8f, 0.8f, 0.8f, 1.0f };
+            float[] specular = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+            GL.Light(LightName.Light0, LightParameter.Ambient, ambient);
+            GL.Light(LightName.Light0, LightParameter.Diffuse, diffuse);
+            GL.Light(LightName.Light0, LightParameter.Specular, specular);
         }
 
-        protected override void OnResize(ResizeEventArgs e)
+        private void SetupMaterials()
+        {
+            float[] matAmbient = { 0.3f, 0.3f, 0.3f, 1.0f };
+            float[] matDiffuse = { 0.6f, 0.6f, 0.6f, 1.0f };
+            float[] matSpecular = { 0.9f, 0.9f, 0.9f, 1.0f };
+            float[] matShininess = { 50.0f };
+
+            GL.Material(MaterialFace.Front, MaterialParameter.Ambient, matAmbient);
+            GL.Material(MaterialFace.Front, MaterialParameter.Diffuse, matDiffuse);
+            GL.Material(MaterialFace.Front, MaterialParameter.Specular, matSpecular);
+            GL.Material(MaterialFace.Front, MaterialParameter.Shininess, matShininess);
+        }
+
+        protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            GL.Viewport(0, 0, Size.X, Size.Y);
-            projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(
+            GL.Viewport(0, 0, Width, Height);
+
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
+            Matrix4 perspective = Matrix4.CreatePerspectiveFieldOfView(
                 MathHelper.DegreesToRadians(45f),
-                Size.X / (float)Size.Y,
+                Width / (float)Height,
                 0.1f,
-                100.0f
-            );
-        }
-        private readonly Queue<Action> mainThreadActions = new();
-    
-        private void EnqueueOnMainThread(Action action)
-        {
-            lock (mainThreadActions)
-                mainThreadActions.Enqueue(action);
+                100f);
+            GL.LoadMatrix(ref perspective);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);
-
-            // ✅ Run any actions queued from background threads
-            lock (mainThreadActions)
+            
+            if (Keyboard.GetState().IsKeyDown(Key.Escape))
+                Exit();
+                
+            if (Keyboard.GetState().IsKeyDown(Key.W))
             {
-                while (mainThreadActions.Count > 0)
-                    mainThreadActions.Dequeue().Invoke();
-            }
-
-            if (KeyboardState.IsKeyDown(Keys.Escape))
-                Close();
-
-            // open model loader with W (non-blocking dialog)
-            if (KeyboardState.IsKeyDown(Keys.W))
-            {
-                OpenFileDialogAndLoadModel();
-            }
-        }
-
-
-        // thread-safe dialog open (same idea you had)
-        volatile bool dialogOpen = false;
-        void OpenFileDialogAndLoadModel()
-        {
-            if (dialogOpen) return;
-            dialogOpen = true;
-
-            Thread t = new Thread(() =>
-            {
-                var ofd = new OpenFileDialog();
-                ofd.Filter = "Wavefront OBJ|*.obj";
-                string selected = null;
-
-                if (ofd.ShowDialog() == DialogResult.OK)
-                    selected = ofd.FileName;
-
-                dialogOpen = false;
-
-                if (selected != null)
+                string path = ShowOpenFileDialog();
+                if (!string.IsNullOrEmpty(path))
                 {
-                    // ✅ run LoadModel() safely on the main (OpenGL) thread
-                    EnqueueOnMainThread(() => LoadModel(selected));
+                    model = new ObjModel().Load(path);
                 }
-            });
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
-        }
-
-        
-
-
-        void LoadModel(string path)
-        {
-            model?.Dispose();
-            var m = new ObjModel();
-            m.LoadFromFile(path);
-
-            var mtlPath = System.IO.Path.ChangeExtension(path, ".mtl");
-            if (System.IO.File.Exists(mtlPath))
-                m.LoadMtl(mtlPath);
-
-            m.GenerateNormals();
-            var vertexData = m.ToFloatArray();
-            Console.WriteLine($"Model loaded: {m.Vertices.Count} vertices, {m.Faces.Count} faces, {vertexData.Length / 8} triangle vertices");
-
-            if (vertexData.Length == 0)
-            {
-                Console.WriteLine("⚠️ No vertex data produced — OBJ parse failed?");
-                return;
             }
-
-            UploadVertexData(vertexData);
-            model = m;
         }
-
-
-        void UploadVertexData(float[] vertexData)
-        {
-            GL.BindVertexArray(vao);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, vertexData.Length * sizeof(float), vertexData, BufferUsageHint.StaticDraw);
-
-            int stride = (3 + 2 + 3) * sizeof(float);
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, stride, 0);
-            GL.EnableVertexAttribArray(1);
-            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, stride, 3 * sizeof(float));
-            GL.EnableVertexAttribArray(2);
-            GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, stride, (3 + 2) * sizeof(float));
-
-            vertexCount = vertexData.Length / (3 + 2 + 3);
-        }
-
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
@@ -202,93 +110,385 @@ namespace Module_7
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            shader.Use();
-
-            // compute camera view matrix from yaw/pitch/distance
-            Vector3 cameraPos = GetCameraPosition();
-            Matrix4 view = Matrix4.LookAt(cameraPos, Vector3.Zero, Vector3.UnitY);
-
-            shader.SetMatrix4("model", modelMatrix);
-            shader.SetMatrix4("view", view);
-            shader.SetMatrix4("projection", projectionMatrix);
-            shader.SetVector3("viewPos", cameraPos);
-
-            // bind texture if model has primary material (simple single-texture support)
-            if (model != null && model.Materials.Count > 0)
-            {
-                // pick first material that has a texture
-                var mat = model.Materials.Values.FirstOrDefault(m => m.TextureID != 0);
-                if (mat != null)
-                {
-                    GL.ActiveTexture(TextureUnit.Texture0);
-                    GL.BindTexture(TextureTarget.Texture2D, (int)mat.TextureID);
-                }
-            }
-            if (vertexCount <= 0)
-            {
-                SwapBuffers();
-                return;
-            }
-
-            GL.BindVertexArray(vao);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, vertexCount);
-
+            SetupModelView();
+            
+            if (model != null)
+                DrawModel(model);
 
             SwapBuffers();
         }
 
-        Vector3 GetCameraPosition()
+        private void SetupModelView()
         {
-            // spherical coordinates
-            float x = (float)(distance * Math.Cos(pitch) * Math.Sin(yaw));
-            float y = (float)(distance * Math.Sin(pitch));
-            float z = (float)(distance * Math.Cos(pitch) * Math.Cos(yaw));
-            return new Vector3(x, y, z);
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
+            GL.Translate(0.0f, 0.0f, -5.0f);
+            GL.Scale(modelScale, modelScale, modelScale);
+            GL.Rotate(angleX, 1.0f, 0.0f, 0.0f);
+            GL.Rotate(angleY, 0.0f, 1.0f, 0.0f);
+        }
+
+        private void DrawModel(ObjModel model)
+        {
+            foreach (var face in model.Faces)
+            {
+                if (model.Materials.TryGetValue(face.MaterialName, out var mat) && mat.DiffuseTextureID != 0)
+                {
+                    GL.Enable(EnableCap.Texture2D);
+                    GL.BindTexture(TextureTarget.Texture2D, mat.DiffuseTextureID);
+                }
+                else
+                {
+                    GL.Disable(EnableCap.Texture2D);
+                }
+
+                BeginPrimitive(face.VertexIndices.Length);
+                
+                foreach (var index in face.VertexIndices)
+                {
+                    var vertex = model.Vertices[index];
+                    GL.Normal3(vertex.Normal);
+                    GL.TexCoord2(vertex.TexCoord);
+                    GL.Vertex3(vertex.Position);
+                }
+
+                GL.End();
+            }
+        }
+
+        private void BeginPrimitive(int vertexCount)
+        {
+            switch (vertexCount)
+            {
+                case 3: GL.Begin(PrimitiveType.Triangles); break;
+                case 4: GL.Begin(PrimitiveType.Quads); break;
+                default: GL.Begin(PrimitiveType.Polygon); break;
+            }
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
-            base.OnMouseDown(e);
             if (e.Button == MouseButton.Left)
             {
-                rotating = true;
-                var pos = MouseState.Position;
-                lastMousePos = new Vector2((float)pos.X, (float)pos.Y);
+                mouseX = e.X;
+                mouseY = e.Y;
+                isPressed = true;
             }
         }
 
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
-            base.OnMouseUp(e);
-            if (e.Button == MouseButton.Left)
-            {
-                rotating = false;
-            }
+            isPressed = false;
         }
 
         protected override void OnMouseMove(MouseMoveEventArgs e)
         {
-            base.OnMouseMove(e);
-            if (rotating)
+            if (isPressed)
             {
-                var pos = new Vector2((float)e.Position.X, (float)e.Position.Y);
-                var delta = pos - lastMousePos;
-                lastMousePos = pos;
+                angleY += (e.X - mouseX) * 0.5f;
+                angleX += (e.Y - mouseY) * 0.5f;
 
-                float sensitivity = 0.005f;
-                yaw -= delta.X * sensitivity;
-                pitch -= delta.Y * sensitivity;
-
-                // clamp pitch so camera doesn't flip
-                pitch = MathHelper.Clamp(pitch, -MathHelper.PiOver2 + 0.01f, MathHelper.PiOver2 - 0.01f);
+                mouseX = e.X;
+                mouseY = e.Y;
             }
         }
 
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
-            base.OnMouseWheel(e);
-            distance *= (float)Math.Pow(0.9, e.OffsetY); // zoom in/out
-            distance = MathHelper.Clamp(distance, 0.1f, 50f);
+            float minScale = 0.005f;
+            float maxScale = 10f;
+
+            modelScale *= e.Delta > 0 ? 1.1f : 1/1.1f;
+            modelScale = MathHelper.Clamp(modelScale, minScale, maxScale);
+        }
+
+        public string ShowOpenFileDialog()
+        {
+            string selectedPath = null;
+
+            var thread = new Thread(() =>
+            {
+                using (var dialog = new OpenFileDialog())
+                {
+                    dialog.Filter = "OBJ files (*.obj)|*.obj";
+                    dialog.Title = "Select a 3D Model";
+
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        selectedPath = dialog.FileName;
+                    }
+                }
+            });
+
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            thread.Join();
+
+            return selectedPath;
+        }
+    }
+
+    public class Vertex
+    {
+        public Vector3 Position;
+        public Vector2 TexCoord;
+        public Vector3 Normal;
+
+        public Vertex(Vector3 pos)
+        {
+            Position = pos;
+            TexCoord = Vector2.Zero;
+            Normal = Vector3.Zero;
+        }
+    }
+
+    public class Face
+    {
+        public int[] VertexIndices;
+        public string MaterialName;
+    }
+
+    public class Material
+    {
+        public string Name;
+        public Vector3 Ambient = new(0.2f, 0.2f, 0.2f);
+        public Vector3 Diffuse = new(0.8f, 0.8f, 0.8f);
+        public Vector3 Specular = new(1.0f, 1.0f, 1.0f);
+
+        public string DiffuseTexturePath;
+        public int DiffuseTextureID;
+
+        public string AmbientTexturePath;
+        public int AmbientTextureID;
+
+        public string BumpTexturePath;
+        public int BumpTextureID;
+    }
+
+    public class ObjModel
+    {
+        public List<Vertex> Vertices = new();
+        public List<Vector2> TexCoords = new();
+        public List<Vector3> Normals = new();
+        public List<Face> Faces = new();
+        public Dictionary<string, Material> Materials = new();
+        public string CurrentMaterial = null;
+
+        public ObjModel Load(string path)
+        {
+            var model = new ObjModel();
+            var lines = File.ReadLines(path);
+
+            foreach (var rawLine in lines)
+            {
+                string line = rawLine.Replace(',', '.');
+                var parts = line.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length == 0) continue;
+
+                ProcessLine(parts, model, path);
+            }
+
+            GenerateNormalsIfMissing(model);
+            return model;
+        }
+
+        private void ProcessLine(string[] parts, ObjModel model, string path)
+        {
+            switch (parts[0])
+            {
+                case "v":
+                    model.Vertices.Add(new Vertex(new Vector3(
+                        float.Parse(parts[1], CultureInfo.InvariantCulture),
+                        float.Parse(parts[2], CultureInfo.InvariantCulture),
+                        float.Parse(parts[3], CultureInfo.InvariantCulture))));
+                    break;
+
+                case "vt":
+                    model.TexCoords.Add(new Vector2(
+                        float.Parse(parts[1], CultureInfo.InvariantCulture),
+                        float.Parse(parts[2], CultureInfo.InvariantCulture)));
+                    break;
+
+                case "vn":
+                    model.Normals.Add(new Vector3(
+                        float.Parse(parts[1], CultureInfo.InvariantCulture),
+                        float.Parse(parts[2], CultureInfo.InvariantCulture),
+                        float.Parse(parts[3], CultureInfo.InvariantCulture)));
+                    break;
+
+                case "f":
+                    ProcessFace(parts, model);
+                    break;
+
+                case "usemtl":
+                    model.CurrentMaterial = parts[1];
+                    break;
+
+                case "mtllib":
+                    var mtlPath = Path.Combine(Path.GetDirectoryName(path), parts[1]);
+                    LoadMtl(mtlPath, model);
+                    break;
+            }
+        }
+
+        private void ProcessFace(string[] parts, ObjModel model)
+        {
+            var face = new Face();
+            var vIndices = new List<int>();
+
+            for (int i = 1; i < parts.Length; i++)
+            {
+                var tokens = parts[i].Split('/');
+                int vIdx = int.Parse(tokens[0]) - 1;
+                vIndices.Add(vIdx);
+
+                var vertex = model.Vertices[vIdx];
+
+                if (tokens.Length > 1 && !string.IsNullOrEmpty(tokens[1]))
+                {
+                    int tIdx = int.Parse(tokens[1]) - 1;
+                    if (tIdx >= 0 && tIdx < model.TexCoords.Count)
+                        vertex.TexCoord = model.TexCoords[tIdx];
+                }
+
+                if (tokens.Length > 2 && !string.IsNullOrEmpty(tokens[2]))
+                {
+                    int nIdx = int.Parse(tokens[2]) - 1;
+                    if (nIdx >= 0 && nIdx < model.Normals.Count)
+                        vertex.Normal = model.Normals[nIdx];
+                }
+
+                model.Vertices[vIdx] = vertex;
+            }
+
+            face.VertexIndices = vIndices.ToArray();
+            face.MaterialName = model.CurrentMaterial;
+            model.Faces.Add(face);
+        }
+
+        public void LoadMtl(string mtlPath, ObjModel model)
+        {
+            if (!File.Exists(mtlPath)) return;
+
+            var lines = File.ReadAllLines(mtlPath);
+            Material current = null;
+
+            foreach (var raw in lines)
+            {
+                var line = raw.Trim();
+                if (line == "" || line.StartsWith("#")) continue;
+
+                var parts = line.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length < 2) continue;
+
+                switch (parts[0])
+                {
+                    case "newmtl":
+                        if (current != null && !string.IsNullOrEmpty(current.Name))
+                            model.Materials[current.Name] = current;
+
+                        current = new Material { Name = parts[1] };
+                        break;
+
+                    case "Ka": current.Ambient = ParseVec3(parts); break;
+                    case "Kd": current.Diffuse = ParseVec3(parts); break;
+                    case "Ks": current.Specular = ParseVec3(parts); break;
+
+                    case "map_Kd":
+                        current.DiffuseTexturePath = Path.Combine(Path.GetDirectoryName(mtlPath), parts[1]);
+                        current.DiffuseTextureID = TextureLoader.LoadTexture(current.DiffuseTexturePath);
+                        break;
+
+                    case "map_Ka":
+                        current.AmbientTexturePath = Path.Combine(Path.GetDirectoryName(mtlPath), parts[1]);
+                        current.AmbientTextureID = TextureLoader.LoadTexture(current.AmbientTexturePath);
+                        break;
+
+                    case "map_bump":
+                    case "bump":
+                        current.BumpTexturePath = Path.Combine(Path.GetDirectoryName(mtlPath), parts[1]);
+                        current.BumpTextureID = TextureLoader.LoadTexture(current.BumpTexturePath);
+                        break;
+                }
+            }
+
+            if (current != null && !string.IsNullOrEmpty(current.Name))
+                model.Materials[current.Name] = current;
+        }
+
+        private Vector3 ParseVec3(string[] parts)
+        {
+            return new Vector3(
+                float.Parse(parts[1], CultureInfo.InvariantCulture),
+                float.Parse(parts[2], CultureInfo.InvariantCulture),
+                float.Parse(parts[3], CultureInfo.InvariantCulture));
+        }
+
+        private void GenerateNormalsIfMissing(ObjModel model)
+        {
+            if (model.Vertices.Count == 0 || model.Vertices[0].Normal != Vector3.Zero)
+                return;
+
+            var tempNormals = new Vector3[model.Vertices.Count];
+
+            foreach (var face in model.Faces)
+            {
+                var v0 = model.Vertices[face.VertexIndices[0]].Position;
+                var v1 = model.Vertices[face.VertexIndices[1]].Position;
+                var v2 = model.Vertices[face.VertexIndices[2]].Position;
+
+                var edge1 = v1 - v0;
+                var edge2 = v2 - v0;
+                var faceNormal = Vector3.Cross(edge1, edge2).Normalized();
+
+                foreach (var idx in face.VertexIndices)
+                {
+                    tempNormals[idx] += faceNormal;
+                }
+            }
+
+            for (int i = 0; i < model.Vertices.Count; i++)
+            {
+                var n = tempNormals[i];
+                model.Vertices[i].Normal = n.Length > 0 ? n.Normalized() : new Vector3(0, 1, 0);
+            }
+        }
+    }
+
+    public static class TextureLoader
+    {
+        public static int LoadTexture(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine("Texture file not found: " + filePath);
+                return 0;
+            }
+
+            using var bitmap = new Bitmap(filePath);
+            bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+            var data = bitmap.LockBits(
+                new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                ImageLockMode.ReadOnly,
+                PixelFormat.Format32bppArgb);
+
+            int textureID = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, textureID);
+
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba,
+                data.Width, data.Height, 0,
+                OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
+                PixelType.UnsignedByte, data.Scan0);
+
+            bitmap.UnlockBits(data);
+
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+
+            return textureID;
         }
     }
 }
