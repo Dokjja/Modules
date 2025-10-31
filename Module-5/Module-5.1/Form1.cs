@@ -62,10 +62,8 @@ public partial class Form1 : Form
         Invalidate();
 
     }
-    private void btnLine_Click(object sender, EventArgs e)
-    {
-        _state = 1;
-    }
+
+    private void btnLine_Click(object sender, EventArgs e) => _state = 1;
 
     private void btnRect_Click(object sender, EventArgs e)
     {
