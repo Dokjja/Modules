@@ -2,7 +2,7 @@
 
 #### Здесь содержатся 9 директорий с заданиями каждого отдельного модуля учебной практики. <br>
 Начало практики: *29 Сентября 2025*. <br>
-Конец практики: *25 Октября 2025* <br>
+Конец практики: *9 Ноября 2025* <br>
 <img src="https://media1.tenor.com/m/z3sxfsXpHtUAAAAd/beaver-carrot.gif" width="200"> 
 ##
 <details>
@@ -56,6 +56,12 @@
     - [Модуль 5.4](https://github.com/Dokjja/Modules/tree/main/Module-5/Module-5.4/Form1.cs)
     - [Модуль 5.5](https://github.com/Dokjja/Modules/tree/main/Module-5/Module-5.5/Form1.cs)
   - [Модуль 6](https://github.com/Dokjja/Modules/blob/main/Module-6/Form1.cs)
+  - [Модуль 7](https://github.com/Dokjja/Modules/blob/main/Module-7/Game.cs)
+  - [Модуль 8](https://github.com/Dokjja/Modules/blob/main/Module-8/Form1.cs)
+  - [Модуль 9](https://github.com/Dokjja/Modules/blob/main/Module-9)
+    - [Модуль 9.1](https://github.com/Dokjja/Modules/tree/main/Module-9/Module-9.1/Program.cs)
+    - [Модуль 9.2](https://github.com/Dokjja/Modules/tree/main/Module-9/Module-9.2/MainWindow.xaml.cs)
+    - [Модуль 9.3](https://github.com/Dokjja/Modules/tree/main/Module-9/Module-9.3/MainWindow.xaml.cs) 
       
 
 
